@@ -1,0 +1,35 @@
+{% extends "application.html" %}
+
+{% block title %}Запросы конкретного пользователя{% endblock %}
+
+{% block content %}
+    <h1>Подробная информации о запросах конкретного пользователя</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>ID пользователя</th>
+                <th>Команда, которую отправил пользователь</th>
+                <th>Дата и время запроса</th>
+                <th>Ответ бота</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for id, user_id, command, created_at, answer in result %}
+            <tr>
+                <td>{{id}}</td>
+                <td>{{user_id}}</td>
+                <td>{{command}}</td>
+                <td>{{created_at}}</td>
+                <td>{{answer}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if first != 1%}
+        <a href="/logs/?offset={{first - 11}}">Предыдущие</a>
+    {% endif %}
+    {% if is_paginator == True%}
+        <a href="/logs/?offset={{first + 9}}">Следующие</a>
+    {% endif %}
+{% endblock %}

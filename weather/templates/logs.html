@@ -1,0 +1,50 @@
+{% extends "application.html" %}
+
+{% block title %}Cписок всех запросов{% endblock %}
+
+{% block content %}
+    <h1>Cписок всех запросов с информацией о пользователе и времени запроса</h1>
+    <p>Выберите время запроса</p>
+    <form action="/logs" method="post">
+        <select name="time">
+            {% for item in times %}
+                {% if item[1] == time_name%}
+                    <option value={{item[1]}} selected>{{item[0]}}</option>
+                {% else %}
+                    <option value={{item[1]}}>{{item[0]}}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+        <button>Показать</button>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>ID пользователя</th>
+                <th>Команда, которую отправил пользователь</th>
+                <th>Дата и время запроса</th>
+                <th>Ответ бота</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for id, user_id, command, created_at, answer in result %}
+            <tr>
+                <td>{{id}}</td>
+                <td>
+                    <a href="/logs/{{user_id}}">{{user_id}}</a>
+                </td>
+                <td>{{command}}</td>
+                <td>{{created_at}}</td>
+                <td>{{answer}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if first != 1 and len == 10 %}
+        <a href="/logs/?offset={{first - 11}}">Предыдущие</a>
+    {% endif %}
+    {% if is_paginator == True%}
+        <a href="/logs/?offset={{first + 9}}">Следующие</a>
+    {% endif %}
+{% endblock %}
